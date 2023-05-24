@@ -71,6 +71,14 @@ services:
       PMA_HOST: mysql
       MYSQL_ROOT_PASSWORD: secret
 
+  node:
+    image: wiwatsrt/docker-laravel-nodejs
+    volumes:
+      - ./src:/var/www/html
+
+
+
+
 
 
 
