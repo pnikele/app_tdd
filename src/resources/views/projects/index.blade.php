@@ -1,23 +1,22 @@
 @extends ('layouts.app')
 
 @section('content')
-    <header class="flex items-center mb-3">
-        <div class="flex justify-between items-end w-full">
-            <h1 class="mr auto">My Projects</h1>
-            <a href="/projects/create" class="button">New Project</a>
+    <header style="margin-bottom:15px">
+        <div style="display:flex">
+            <p style="margin-right:auto" >
+                    <a style="color:gray" >My Projects</a>
+            </p>
+            <a style="margin-left:auto" href="/projects/create" class="button">New Project</a>
         </div>
     </header>
 
-    <main class="lg:flex lg:flex-wrap -mx-3">
+    <div class="flex">
         @forelse ($projects as $project)
-            {{-- <div class="lg:w-1/3 px-3 pb-6">
+        <div >
                 @include ('projects.card')
-            </div> --}}
-            <li>
-                <a href="{{$project->path()}}">{{$project->title}}</a>
-            </li>
+        </div>
         @empty
             <div>No projects yet.</div>
         @endforelse
-    </main>
+    </div>
 @endsection
