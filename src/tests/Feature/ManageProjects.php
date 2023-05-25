@@ -61,9 +61,7 @@ class ManageProjects extends TestCase
      */
     public function a_user_can_create_a_project()
     {
-        $this->withoutExceptionHandling();
-
-        $this->actingAs(User::factory()->create());  //sign a user in
+        $this->signIn();
 
         $this->get('/projects/create')->assertStatus(200); //if i visit projects/create i should be able to see it 
 
@@ -71,8 +69,11 @@ class ManageProjects extends TestCase
             'title'=>$this->faker->sentence,
             'description'=>$this->faker->paragraph
         ];
+        $response = $this->post('/projects', $attributes);
 
-        $this->post('/projects', $attributes)->assertRedirect('/projects');  //check if rederected where as expected
+        $project = Project::where($attributes)->first();
+
+        $response->assertRedirect($project->path());//check if rederected where as expected
 
         $this->assertDatabaseHas('projects',$attributes); //exptected them to be inserted into the projects table in database
 
@@ -85,8 +86,7 @@ class ManageProjects extends TestCase
      * @test
      */
     public function a_user_can_view_their_project(){
-        //$project = factory('\Models\Project')->create();
-        $this->be(User::factory()->create()); //sign in user
+        $this->signIn();
 
         $this->withoutExceptionHandling();
         
@@ -102,11 +102,7 @@ class ManageProjects extends TestCase
      */
     public function an_authenticated_user_cannot_view_the_projects_of_others()
     {
-        // $this->signIn();
-
-        $this->be(User::factory()->create());
-
-        //$this->withoutExceptionHandling();
+        $this->signIn();
 
         $project = Project::factory()->create();
 
@@ -120,8 +116,8 @@ class ManageProjects extends TestCase
      * @test
      */
     public function a_project_requires_a_title(){
-        //parent::setUp();
-        $this->actingAs(User::factory()->create());  //sign a user in
+        $this->signIn();
+
         $attributes = Project::factory()->raw(['title'=>'']);
         $this->post('/projects',$attributes)->assertSessionHasErrors('title'); //assert that there is a title error
 
@@ -131,7 +127,8 @@ class ManageProjects extends TestCase
      * @test
      */
     public function a_project_requires_a_description(){
-        $this->actingAs(User::factory()->create());//sign a user in
+        //$this->actingAs(User::factory()->create());//sign a user in
+        $this->signIn();
         $attributes = Project::factory()->raw(['description'=>'']);
         $this->post('/projects',$attributes)->assertSessionHasErrors('description'); //assert that there is a title error
 

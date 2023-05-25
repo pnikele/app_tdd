@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProjectsController;
+use App\Http\Controllers\ProjectsTasksController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +26,11 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('/projects/create', [ProjectsController::class, 'create']);  
     Route::get('/projects/{project}', [ProjectsController::class, 'show']);
     Route::post('/projects', [ProjectsController::class, 'store']);
-    //Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+    Route::post('/projects/{project}/tasks', 'ProjectsTasksController@store');
+    Route::patch('/projects/{project}/tasks/{task}', 'ProjectsTasksController@update');
+
 });
 
 
@@ -34,11 +39,3 @@ Route::resource('home', HomeController::class);
 
 Auth::routes();
 
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

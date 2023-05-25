@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use DatabaseMigrations;
 //\\use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
 

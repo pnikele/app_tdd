@@ -14,7 +14,21 @@
         <div class="flex1">
                 <div style="margin-bottom:20px">
                         <h2 style="margin-bottom:3px" class="mr auto">Tasks</h2>
-                        <div class="card">LOrem ipsum</div>
+                        @foreach ($project->tasks as $task)
+                        <div class="card mb-3">
+                            {{-- <form method="POST" action="{{ $task->path() }}">
+                                @method('PATCH')
+                                @csrf
+
+                                <div class="flex">
+                                    <input name="body" value="{{ $task->body }}" class="w-full {{ $task->completed ? 'text-grey' : '' }}">
+                                    <input name="completed" type="checkbox" onChange="this.form.submit()" {{ $task->completed ? 'checked' : '' }}>
+                                </div>
+                            </form>
+                        </div> --}}
+                        <div class="card mb-3">{{ $task->body }}</div>
+                    @endforeach
+                        {{-- <div class="card">LOrem ipsum</div> --}}
                 </div>
                 <div>
                         <h2 style="margin-bottom:3px"class="mr auto">Notes</h2>
