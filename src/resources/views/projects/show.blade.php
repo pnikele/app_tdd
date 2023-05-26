@@ -11,30 +11,46 @@
 </header>
 <main>
         <div style="display:flex;padding: -5px;">
-        <div class="flex1">
-                <div style="margin-bottom:20px">
-                        <h2 style="margin-bottom:3px" class="mr auto">Tasks</h2>
-                        @foreach ($project->tasks as $task)
-                        <div class="card mb-3">
-                            {{-- <form method="POST" action="{{ $task->path() }}">
-                                @method('PATCH')
-                                @csrf
-
-                                <div class="flex">
-                                    <input name="body" value="{{ $task->body }}" class="w-full {{ $task->completed ? 'text-grey' : '' }}">
-                                    <input name="completed" type="checkbox" onChange="this.form.submit()" {{ $task->completed ? 'checked' : '' }}>
+                <div class="flex1">
+                        <div style="margin-bottom:20px">
+                                <h2 style="margin-bottom:3px" class="mr auto">Tasks</h2>
+                                @foreach($project->tasks as $task)
+                                <div class="card mb-3">
+                                <form method="POST" action="{{ $task->path() }}"> 
+                                        @method('PATCH')
+                                        @csrf
+                                        <div style="display:flex">
+                                        <input name="body" value="{{ $task->body }}" style="width:100%;border:none; {{ $task->completed ? 'color:gray' : '' }}">
+                                        <input name="completed" type="checkbox" style="border:none" onChange="this.form.submit()" {{ $task->completed ? 'checked' : '' }}>
+                                        </div>
+                                </form>
                                 </div>
-                            </form>
-                        </div> --}}
-                        <div class="card mb-3">{{ $task->body }}</div>
-                    @endforeach
-                        {{-- <div class="card">LOrem ipsum</div> --}}
+                                @endforeach
+                                <div class="card mb-3">
+                                        <form action="{{ $project->path() . '/tasks' }}" method="POST">
+                                            @csrf
+                
+                                            <input placeholder="Add a new task..." name="body" style="width:100%;border:none">
+                                        </form>
+                                </div>
+                        </div>
+                        <div>
+                                <h2 style="margin-bottom:3px"class="mr auto">Notes</h2>
+                                <form action="{{ $project->path()}}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <textarea
+                                                name="notes" 
+                                                class="card" 
+                                                style="text-decoration:none;min-height: 200px;width:100%;margin-bottom:10px" 
+                                                placeholder="Want to make a note?"
+                                        >{{$project->notes}}</textarea>
+                                        <button type="submit">Save</button>
+                                </form>
+                        </div>
                 </div>
-                <div>
-                        <h2 style="margin-bottom:3px"class="mr auto">Notes</h2>
-                        <textarea class="card" style="text-decoration:none;min-height: 200px;width:100%">LOrem ipsum</textarea>
-                </div>
-        </div>
+
+        
         <div class="flex2">
                 <div class="card" style="min-height: 200px"> 
                         <h3 class="font-normal text-xl py-4 -ml-5 border-l-4 border-blue-light pl-4">
@@ -44,6 +60,7 @@
                         <div class="text-grey">{{ ($project->description)}}</div>
                     
                     </div>
+        </div>
         </div>
 </main>
 
