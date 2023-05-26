@@ -5,13 +5,14 @@
                 <p style="margin-right:auto" >
                         <a style="text-decoration:none;color:gray" href="/projects">My Projects</a> / {{$project->title}}
                      </p>
-                <a style="margin-left:auto" href="/projects/create" class="button">New Project</a>
+                <a style="margin-left:auto" href="{{$project->path().'/edit'}}" class="button">Edit Project</a>
 
         </div>
 </header>
 <main>
         <div style="display:flex;padding: -5px;">
                 <div class="flex1">
+                         {{-- tasks --}}
                         <div style="margin-bottom:20px">
                                 <h2 style="margin-bottom:3px" class="mr auto">Tasks</h2>
                                 @foreach($project->tasks as $task)
@@ -34,7 +35,8 @@
                                         </form>
                                 </div>
                         </div>
-                        <div>
+                        {{-- general notes --}}
+                        <div> 
                                 <h2 style="margin-bottom:3px"class="mr auto">Notes</h2>
                                 <form action="{{ $project->path()}}" method="POST">
                                         @csrf
@@ -47,6 +49,7 @@
                                         >{{$project->notes}}</textarea>
                                         <button type="submit">Save</button>
                                 </form>
+                                @include ('errors')
                         </div>
                 </div>
 
