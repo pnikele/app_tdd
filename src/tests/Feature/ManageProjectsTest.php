@@ -4,25 +4,24 @@ namespace Tests\Feature;
 
 use App\Models\Project;
 use App\Models\User;
+use Carbon\Factory;
+use Facades\Tests\Setup\ProjectFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\ResponseTrait;
 use Illuminate\Process\FakeProcessResult;
 use Tests\TestCase;
 
-class ManageProjects extends TestCase
+class ManageProjectsTest extends TestCase
 {
     use WithFaker,RefreshDatabase;
+    //   guests_cannot_view_projects
+    //  guests_cannot_view_a_single_project
      /**
      * @test
      */
     public function guests_cannot_manage_projects(){
-        //$this->withoutExceptionHandling();
-
         $project = Project::factory()->create(); //create a project
-
-        //$attributes = Project::factory()->raw();  //if you have a project
-
         $this->get('/projects')->assertRedirect('login');  //if you try to access the dashboard you should be reedirected
         $this->get('/projects/create')->assertRedirect('login');
         $this->get($project->path())->assertRedirect('login'); //if you try to access a specific project you should be redirected
@@ -31,31 +30,6 @@ class ManageProjects extends TestCase
 
 
     }
-
-
-    //  /**
-    //  * @test
-    //  */
-    // public function guests_cannot_view_projects(){
-    //     //$this->withoutExceptionHandling();
-
-    //     //$this->get('/projects')->assertRedirect('login'); 
-
-    // }
-
-    // /**
-    //  * @test
-    //  */
-    // public function guests_cannot_view_a_single_project(){
-    //     //$this->withoutExceptionHandling();
-    //     //$project = Project::factory()->create();
-
-    //     //$this->get($project->path())->assertRedirect('login'); 
-
-    // }
-
-
-
     /**
      * @test
      */
@@ -67,7 +41,8 @@ class ManageProjects extends TestCase
 
         $attributes=[
             'title'=>$this->faker->sentence,
-            'description'=>$this->faker->paragraph
+            'description'=>$this->faker->paragraph,
+            'notes' => 'General notes'
         ];
         $response = $this->post('/projects', $attributes);
 
@@ -75,10 +50,25 @@ class ManageProjects extends TestCase
 
         $response->assertRedirect($project->path());//check if rederected where as expected
 
-        $this->assertDatabaseHas('projects',$attributes); //exptected them to be inserted into the projects table in database
+        //$this->assertDatabaseHas('projects',$attributes); //exptected them to be inserted into the projects table in database
 
-        $this->get('/projects')->assertSee($attributes['title']); //should be able to see it 
+        $this->get($project->path())
+            ->assertSee($attributes['title']) //should be able to see it 
+            ->assertSee($attributes['description']) //should be able to see it 
+            ->assertSee($attributes['notes']); //should be able to see it 
 
+    }
+
+
+    /** @test */
+    function a_user_can_update_a_project()
+    {
+        $project = ProjectFactory::create();
+
+        $this->actingAs($project->owner)
+            ->patch($project->path(),$attributes = ['notes' => 'Changed'])
+            ->assertRedirect($project->path());
+            $this->assertDatabaseHas('projects',$attributes);
     }
 
 
@@ -86,15 +76,13 @@ class ManageProjects extends TestCase
      * @test
      */
     public function a_user_can_view_their_project(){
-        $this->signIn();
 
-        $this->withoutExceptionHandling();
-        
-        $project = Project::factory()->create(['owner_id'=>auth()->id()]);
+        $project = ProjectFactory::create();
 
-        $this->get($project->path())
-        ->assertSee($project->title)
-        ->assertSee($project->description);
+        $this->actingAs($project->owner)
+            ->get($project->path())
+            ->assertSee($project->title)
+            ->assertSee($project->description);
     }
 
     /**
@@ -109,7 +97,19 @@ class ManageProjects extends TestCase
 
         $this->get($project->path())->assertStatus(403);
     }
+    
+        /**
+     * @test
+     */
+    public function an_authenticated_user_cannot_update_the_projects_of_others()
+    {
+        $this->signIn();
 
+        $project = Project::factory()->create();
+
+
+        $this->patch($project->path(),[])->assertStatus(403);
+    }
 
 
     /**
