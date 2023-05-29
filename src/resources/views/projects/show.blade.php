@@ -52,18 +52,10 @@
                                 @include ('errors')
                         </div>
                 </div>
-
-        
-        <div class="flex2">
-                <div class="card" style="min-height: 200px"> 
-                        <h3 class="font-normal text-xl py-4 -ml-5 border-l-4 border-blue-light pl-4">
-                            <a class="text-black no-underline">{{ $project->title }}</a>
-                        </h3>
-                    
-                        <div class="text-grey">{{ ($project->description)}}</div>
-                    
-                    </div>
-        </div>
+                <div class="flex2">
+                        @include ('projects.card')
+                        @include ('projects.activity.card')
+                </div>
         </div>
 </main>
 

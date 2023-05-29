@@ -1,9 +1,20 @@
 {{-- <div class="card" style="height: 200px"> --}}
-<div class="card" style="height: 200px"> 
-    <h3 class="font-normal text-xl py-4 -ml-5 border-l-4 border-blue-light pl-4">
-        <a href="{{ $project->path() }}" class="text-black no-underline">{{ $project->title }}</a>
+    
+<div class="card" style="min-height: 200px; padding:20px;"> 
+    <h3 class="font-normal text-xl py-4 -ml-5 border-l-4 pl-4">
+        <a href="{{ $project->path() }}" style="color:black;no-underline">{{ $project->title }}</a>
     </h3>
 
-    <div class="text-grey">{{ Illuminate\Support\Str::limit($project->description, 100)}}</div>
+    <div style="color:gray;margin-bottom:10px">{{ ($project->description)}}</div>
+
+    <footer>
+        <form method="POST" action="{{$project->path()}}">
+            @method('DELETE')
+            @csrf
+            <button style="float:right" type="submit">Delete</button>
+        </form>
+
+    </footer>
 
 </div>
+

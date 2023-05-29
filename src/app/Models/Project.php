@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use DateTimeInterface; 
+
 
 class Project extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
+     public $old = [];
 
     //construct the path
     public function path()
@@ -54,4 +57,45 @@ class Project extends Model
     {
         return $this->tasks()->create(compact('body'));
     }
+
+    /**
+     * Record activity for a project.
+     *
+     * @param string $description
+     */
+    public function recordActivity($description)
+    {
+        $this->activity()->create([
+            'user_id' => ($this->project ?? $this)->owner->id,
+            'description' => $description,
+            'changes' => $this->activityChanges()
+        ]);
+    }
+
+    /**
+     * Fetch the changes to the model.
+     *
+     * @param  string $description
+     * @return array|null
+     */
+    protected function activityChanges()
+    {
+        if ($this->wasChanged()) {
+            return [
+                'before' => array_diff($this->old, $this->getAttributes()),
+                'after' => $this->getChanges(),
+            ];
+        }
+    }
+
+        public function activity()
+    {
+        return $this->hasMany(Activity::class)->latest();
+    }
+
+    protected function serializeDate(DateTimeInterface $date)
+{
+    return $date->format('Y-m-d H:i:s');
+
+}
 }
