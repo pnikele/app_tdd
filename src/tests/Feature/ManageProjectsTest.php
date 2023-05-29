@@ -50,7 +50,7 @@ class ManageProjectsTest extends TestCase
 
         $response->assertRedirect($project->path());//check if rederected where as expected
 
-        //$this->assertDatabaseHas('projects',$attributes); //exptected them to be inserted into the projects table in database
+        $this->assertDatabaseHas('projects',$attributes); //exptected them to be inserted into the projects table in database
 
         $this->get($project->path())
             ->assertSee($attributes['title']) //should be able to see it 
@@ -58,6 +58,31 @@ class ManageProjectsTest extends TestCase
             ->assertSee($attributes['notes']); //should be able to see it 
 
     }
+        /** @test */
+        function unauthorized_users_cannot_delete_projects()
+        {
+            $project = ProjectFactory::create();
+    
+            $this->delete($project->path())
+                ->assertRedirect('/login');
+    
+            $this->signIn();
+    
+            $this->delete($project->path())
+                 ->assertStatus(403);
+        }
+    
+        /** @test */
+        function a_user_can_delete_a_project()
+        {
+            $project = ProjectFactory::create();
+    
+            $this->actingAs($project->owner)
+                ->delete($project->path())
+                ->assertRedirect('/projects');
+    
+            $this->assertDatabaseMissing('projects', $project->only('id'));
+        }
 
 
     /** @test */

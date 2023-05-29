@@ -75,12 +75,12 @@ button{
     font-size: large;
  }
 
-.card {
+/* .card {
     background-color: #FFFFFF;
     padding: 7px;
     border-radius: 5px;
     box-shadow: 5px 5px 3px #cecdcd;
-}
+} */
 .flex > div {
     box-sizing: border-box;
     margin: 10px 10px 0 0;

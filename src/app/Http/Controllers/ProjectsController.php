@@ -6,6 +6,8 @@ use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Spatie\LaravelIgnition\Recorders\QueryRecorder\Query;
 
 class ProjectsController extends Controller
 {
@@ -24,6 +26,7 @@ class ProjectsController extends Controller
     }
 
     public function store(){
+
 
         $project = auth()->user()->projects()->create($this->validateRequest());
 
@@ -52,6 +55,22 @@ class ProjectsController extends Controller
         $project->update($this->validateRequest());
 
         return redirect($project->path());
+    }
+
+        /**
+     * Destroy the project.
+     *
+     * @param  Project $project
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function destroy(Project $project)
+    {
+        $this->authorize('update', $project);
+
+        $project->delete();
+
+        return redirect('/projects');
     }
 
     protected function validateRequest()

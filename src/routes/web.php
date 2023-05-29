@@ -22,16 +22,21 @@ Route::get('/', function () {
 
 
 Route::group(['middleware'=>'auth'],function(){
-    Route::get('/projects', [ProjectsController::class, 'index']);  //dashboard
-    Route::get('/projects/create', [ProjectsController::class, 'create']);  
-    Route::get('/projects/{project}', [ProjectsController::class, 'show']);
-    Route::get('/projects/{project}/edit', [ProjectsController::class, 'edit']);
-    Route::patch('/projects/{project}', [ProjectsController::class, 'update']);
-    Route::post('/projects', [ProjectsController::class, 'store']);
+    // Route::get('/projects', [ProjectsController::class, 'index']);  //dashboard
+    // Route::get('/projects/create', [ProjectsController::class, 'create']);  
+    // Route::get('/projects/{project}', [ProjectsController::class, 'show']);
+    // Route::get('/projects/{project}/edit', [ProjectsController::class, 'edit']);
+    // Route::patch('/projects/{project}', [ProjectsController::class, 'update']);
+    // Route::post('/projects', [ProjectsController::class, 'store']);
+    // Route::delete('/projects/{project}', [ProjectsController::class, 'destroy']);  //dashboard
+    Route::resource('projects','ProjectsController');
+    
+    
+    
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-
     Route::post('/projects/{project}/tasks', 'ProjectsTasksController@store');
     Route::patch('/projects/{project}/tasks/{task}', 'ProjectsTasksController@update');
+
 
 });
 
