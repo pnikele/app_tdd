@@ -39,25 +39,29 @@ class ManageProjectsTest extends TestCase
 
         $this->get('/projects/create')->assertStatus(200); //if i visit projects/create i should be able to see it 
 
-        $attributes=[
-            'title'=>$this->faker->sentence,
-            'description'=>$this->faker->paragraph,
-            'notes' => 'General notes'
-        ];
-        $response = $this->post('/projects', $attributes);
+        $attributes= Project::factory()->raw();
 
-        $project = Project::where($attributes)->first();
+        $response = $this->followingRedirects()->post('/projects', $attributes);
 
-        $response->assertRedirect($project->path());//check if rederected where as expected
 
-        $this->assertDatabaseHas('projects',$attributes); //exptected them to be inserted into the projects table in database
-
-        $this->get($project->path())
+        $response
             ->assertSee($attributes['title']) //should be able to see it 
             ->assertSee($attributes['description']) //should be able to see it 
             ->assertSee($attributes['notes']); //should be able to see it 
 
     }
+    /** @test */
+    function a_user_can_see_all_projects_they_have_been_invited_to_on_their_dashboard()
+    {
+        $user = $this->signIn();
+
+        $project = ProjectFactory::create();
+
+        $project->invite($user);
+
+        $this->get('/projects')->assertSee($project->title);
+    }
+
         /** @test */
         function unauthorized_users_cannot_delete_projects()
         {
@@ -66,10 +70,15 @@ class ManageProjectsTest extends TestCase
             $this->delete($project->path())
                 ->assertRedirect('/login');
     
-            $this->signIn();
+            $user = $this->signIn();
     
             $this->delete($project->path())
                  ->assertStatus(403);
+
+            $project->invite($user);
+
+            $this->actingAs($user)->delete($project->path())
+            ->assertStatus(403);
         }
     
         /** @test */

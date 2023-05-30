@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProjectInvitationsController;
 use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\ProjectsTasksController;
 use Illuminate\Support\Facades\Route;
@@ -31,11 +32,11 @@ Route::group(['middleware'=>'auth'],function(){
     // Route::delete('/projects/{project}', [ProjectsController::class, 'destroy']);  //dashboard
     Route::resource('projects','ProjectsController');
     
-    
+    Route::post('/projects/{project}/invitations', [ProjectInvitationsController::class, 'store']);
     
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::post('/projects/{project}/tasks', 'ProjectsTasksController@store');
-    Route::patch('/projects/{project}/tasks/{task}', 'ProjectsTasksController@update');
+    Route::post('/projects/{project}/tasks', [ProjectsTasksController::class, 'store']);
+    Route::patch('/projects/{project}/tasks/{task}', [ProjectsTasksController::class, 'update']);
 
 
 });

@@ -5,8 +5,13 @@
                 <p style="margin-right:auto" >
                         <a style="text-decoration:none;color:gray" href="/projects">My Projects</a> / {{$project->title}}
                      </p>
-                <a style="margin-left:auto" href="{{$project->path().'/edit'}}" class="button">Edit Project</a>
 
+                <div>
+                        @foreach ($project->members as $member)
+                            {{$member->name}}
+                        @endforeach
+                        <a style="margin-left:auto" href="{{$project->path().'/edit'}}" class="button">Edit Project</a>
+                </div>     
         </div>
 </header>
 <main>
@@ -55,6 +60,9 @@
                 <div class="flex2">
                         @include ('projects.card')
                         @include ('projects.activity.card')
+                        @can ('manage', $project)
+                                @include ('projects.invite')
+                        @endcan
                 </div>
         </div>
 </main>

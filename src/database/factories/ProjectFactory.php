@@ -20,6 +20,7 @@ class ProjectFactory extends Factory
         return [
             'title' =>fake()->sentence(),
             'description' =>fake()->paragraph(),
+            'notes' => 'foobar notes',
             'owner_id' => User::factory()->create()
 
         ];
