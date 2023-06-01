@@ -24,7 +24,7 @@ services:
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: secret
     volumes:
-      - ./mysql:/var/lib/mysql2
+      - ./mysql:/var/lib/mysql
 
   php:
     build:
@@ -70,6 +70,15 @@ services:
     environment: 
       PMA_HOST: mysql
       MYSQL_ROOT_PASSWORD: secret
+    
+
+  node:
+    image: wiwatsrt/docker-laravel-nodejs
+    volumes:
+      - ./src:/var/www/html
+
+
+
 
 
 
