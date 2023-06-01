@@ -112,16 +112,25 @@ export default {
         addTask(){
             this.form.tasks.push({value: ''});
         },
-        async submit(){
-            try {
-                let response = await axios.post('/projects',this.form)
+        submit(){
+            // try {
+            //     let response = await axios.post('/projects',this.form)
 
-                location = response.data.message;
+            //     location = response.data.message;
 
-            }catch(error){
-                this.errors = (error.response.data.errors);
-            }
-            }
+            // }catch(error){
+            //     this.errors = (error.response.data.errors);
+            // }
+            axios.post('/projects', this.form)
+                .then(response =>{
+                    location = response.data.message;
+                })
+
+                .catch(error => {
+                    this.errors = error.response.data.errors;
+
+                });
+        }
         
     },
     mounted(){
