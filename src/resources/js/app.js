@@ -7,7 +7,7 @@
 import './bootstrap';
 import { createApp } from 'vue';
 import '../sass/app.scss'
-
+import '../css/app.css';
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
  * registering components with the application instance so they are ready
@@ -18,6 +18,9 @@ const app = createApp({});
 
 import ExampleComponent from './components/ExampleComponent.vue';
 app.component('example-component', ExampleComponent);
+
+import NewProjectModal from './components/NewProjectModal.vue';
+app.component('new-project-modal', NewProjectModal);
 
 /**
  * The following block of code may be used to automatically register your

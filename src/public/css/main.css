@@ -100,6 +100,55 @@ button{
   .flex > div:nth-child(-n+3) {
     margin-top: 0;
   }
-  
 
 
+
+  .popup {
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+      display: none;
+  }
+  .popup-content {
+      background-color: white;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888888;
+      width: 50%;
+      font-weight: bolder;
+  }
+  .popup-content button {
+      display: block;
+      margin: 0;
+  }
+  .show {
+      display: block;
+  }
+
+  .border_red{
+    border-style: solid;
+    border-color: red;
+  }
+
+  .border_normal{
+    border-width: 1px;
+    border-style: inset;
+    border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+    border-image: initial;
+    border-radius: 2px;
+
+  }
+
+  input{
+    border-width: 1px;
+    border-style: inset;
+    border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+    border-image: initial;
+    border-radius: 2px;
+
+  }
